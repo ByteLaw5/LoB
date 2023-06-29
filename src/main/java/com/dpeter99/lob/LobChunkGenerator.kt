@@ -50,9 +50,9 @@ class LobChunkGenerator(val biomeRegistry : HolderLookup.RegistryLookup<Biome>) 
     override fun applyBiomeDecoration(level: WorldGenLevel, chunk: ChunkAccess, structureManager: StructureManager) {
         //super.applyBiomeDecoration(level, chunk, structureManager);
 
-        //default(chunk, level, structureManager)
+        default(chunk, level, structureManager)
 
-        structureManager.
+        //structureManager.
 
     }
 
