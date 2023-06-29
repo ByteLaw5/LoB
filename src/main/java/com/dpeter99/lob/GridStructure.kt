@@ -1,16 +1,26 @@
 package com.dpeter99.lob
 
+import com.google.common.collect.Lists
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece
 import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.levelgen.structure.Structure.GenerationStub
+import net.minecraft.world.level.levelgen.structure.StructurePiece
 import net.minecraft.world.level.levelgen.structure.StructureType
+import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.shapes.BooleanOp
+import net.minecraft.world.phys.shapes.Shapes
 import java.util.*
+import java.util.function.Consumer
 
 class GridStructure(pSettings: StructureSettings,
                     var startPool: Holder<StructureTemplatePool>,
@@ -40,7 +50,7 @@ class GridStructure(pSettings: StructureSettings,
             blockPos,
             false,
             Optional.empty(),
-            16
+            0
         )
 
         return placement;
@@ -48,6 +58,21 @@ class GridStructure(pSettings: StructureSettings,
 
     override fun type(): StructureType<*> {
         return Registration.GRID_STRUCTURE.get();
+    }
+
+}
+
+
+class GridPlacement{
+
+    fun place(){
+        return Optional.of<GenerationStub>(GenerationStub(
+            BlockPos(0, 0, 0)
+        ) { piecesBuilder: StructurePiecesBuilder ->
+            //piecesBuilder.addPiece(TemplateStructurePiece(
+//
+//            ))
+        }
     }
 
 }

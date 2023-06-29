@@ -7,7 +7,6 @@
     "absolute": 100
   },
   "spawn_overrides": {},
-  "start_jigsaw_name": "lob:side",
   "start_pool": "lob:test_room_pool",
   "step": "raw_generation",
   "terrain_adaptation": "beard_thin",

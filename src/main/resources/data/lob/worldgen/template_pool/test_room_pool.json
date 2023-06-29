@@ -3,7 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "lob:room",
+        "location": "lob:test_struct",
         "projection": "rigid",
         "processors": "minecraft:empty"
       },
