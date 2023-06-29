@@ -1,0 +1,8 @@
+{
+  "type": "lob:lob_dimension",
+  "generator": {
+    "type": "lob:lob_chunkgen",
+    "settings": {
+    }
+  }
+}

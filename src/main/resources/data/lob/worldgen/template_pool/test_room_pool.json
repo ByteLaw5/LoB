@@ -1,0 +1,14 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "lob:room",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}
