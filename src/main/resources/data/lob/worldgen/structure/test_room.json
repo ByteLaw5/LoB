@@ -1,14 +1,4 @@
 {
   "type": "lob:grid_structure",
-  "biomes": "lob:lob_biome",
-  "max_distance_from_center": 116,
-  "size": 1,
-  "start_height": {
-    "absolute": 100
-  },
-  "spawn_overrides": {},
-  "start_pool": "lob:test_room_pool",
-  "step": "raw_generation",
-  "terrain_adaptation": "beard_thin",
-  "use_expansion_hack": false
+  "start_pool": "lob:test_room_pool"
 }

@@ -38,38 +38,37 @@ class GridStructure(pSettings: StructureSettings,
         }
     }
 
+
+
     override fun findGenerationPoint(pContext: GenerationContext): Optional<GenerationStub> {
         val startY: Int = 0
 
         val chunkPos: ChunkPos = pContext.chunkPos()
         val blockPos = BlockPos(chunkPos.minBlockX, startY, chunkPos.minBlockZ)
 
-        val placement = JigsawPlacement.addPieces(
-            pContext,
-            this.startPool,
-            this.startJigsawName,
-            1,
-            blockPos,
-            false,
-            Optional.empty(),
-            0
-        )
+
+
+        val chunkpos = pContext.chunkPos()
 
         return Optional.of(GenerationStub(blockPos){
-            Optional.of(generatePieces(it, pContext))
+            val pos = BlockPos.MutableBlockPos(chunkpos.minBlockX, 0, chunkpos.minBlockZ)
+            for (y in 0 until pContext.heightAccessor.height step 7){
+                generatePieces(it, pContext, BlockPos(chunkpos.minBlockX, y, chunkpos.minBlockZ))
+            }
+
         });
     }
 
-    private fun generatePieces(pBuilder: StructurePiecesBuilder, pContext: GenerationContext): GridStructurePiece {
+    private fun generatePieces(pBuilder: StructurePiecesBuilder, pContext: GenerationContext, pos: BlockPos): GridStructurePiece {
         val chunkpos = pContext.chunkPos()
         val worldgenrandom = pContext.random()
-        val blockpos = BlockPos(chunkpos.minBlockX, 0, chunkpos.minBlockZ)
+        //val blockpos = BlockPos(chunkpos.minBlockX, 0, chunkpos.minBlockZ)
         val rotation = Rotation.NONE
 
         val piece = GridStructurePiece(
             pContext.structureTemplateManager,
             LobMod.resource("test_struct"),
-            blockpos,
+            pos,
             rotation,
             0)
         pBuilder.addPiece(piece)

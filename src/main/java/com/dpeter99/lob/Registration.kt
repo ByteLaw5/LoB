@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureType
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.RegistryObject
@@ -24,6 +25,7 @@ object Registration {
     val FEATURES: DeferredRegister<Feature<*>> = DeferredRegister.create(Registries.FEATURE, ID);
     val STRUCTURE_TYPE: DeferredRegister<StructureType<*>> = DeferredRegister.create(Registries.STRUCTURE_TYPE, ID);
     val STRUCTURE_PIECE_TYPES: DeferredRegister<StructurePieceType> = DeferredRegister.create(Registries.STRUCTURE_PIECE, ID);
+    val STRUCTURE_PLACEMENT_TYPE: DeferredRegister<StructurePlacementType<*>> = DeferredRegister.create(Registries.STRUCTURE_PLACEMENT, ID);
 
     fun init() {
         CHUNK_GENERATORS.register(MOD_BUS)
@@ -43,16 +45,15 @@ object Registration {
             )
         }
 
-    val GRID_STRUCTURE_PIECE: RegistryObject<StructurePieceType> = registerPieceType("TFFCMain", ::GridStructurePiece);
+    val GRID_STRUCTURE_PIECE: RegistryObject<StructurePieceType> = registerPieceType("grid_piece", ::GridStructurePiece);
+
+    val GRID_PLACEMENT = STRUCTURE_PLACEMENT_TYPE.register("grid_placement") { GridPlacement.CODEC as StructurePlacementType<*> };
 
     private fun <T : Structure> explicitStructureTypeTyping(structureCodec: Codec<T>): StructureType<T> {
         return StructureType { structureCodec }
     }
 
-    private fun registerPieceType(
-        name: String,
-        structurePieceType: StructurePieceType
-    ): RegistryObject<StructurePieceType> {
+    private fun registerPieceType(name: String, structurePieceType: StructurePieceType): RegistryObject<StructurePieceType> {
         return STRUCTURE_PIECE_TYPES.register(name.lowercase()) { structurePieceType }
     }
 }
