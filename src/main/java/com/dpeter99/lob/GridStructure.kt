@@ -66,12 +66,14 @@ class GridStructure(pSettings: StructureSettings,
         val blockpos = BlockPos(chunkpos.minBlockX, 0, chunkpos.minBlockZ)
         val rotation = Rotation.NONE
 
-        return GridStructurePiece(
+        val piece = GridStructurePiece(
             pContext.structureTemplateManager,
             LobMod.resource("test_struct"),
             blockpos,
             rotation,
             0)
+        pBuilder.addPiece(piece)
+        return piece
     }
 
     override fun type(): StructureType<*> {
