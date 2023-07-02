@@ -1,10 +1,14 @@
 package com.dpeter99.lob
 
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.chunk.LevelChunk
+import net.minecraftforge.common.capabilities.ICapabilityProvider
+import net.minecraftforge.event.AttachCapabilitiesEvent
 import net.minecraftforge.fml.common.Mod
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+
 
 /**
  * Main mod class. Should be an `object` declaration annotated with `@Mod`.
@@ -32,6 +36,14 @@ object LobMod {
         // Register the KDeferredRegister to the mod-specific event bus
         //ModBlocks.REGISTRY.register(MOD_BUS)
 
+    }
+
+    fun attachCapToChunk(event: AttachCapabilitiesEvent<LevelChunk>){
+        LOGGER.error("asdasd");
+
+        val provider: ICapabilityProvider = GridGenerationDataStoreProvider()
+
+        event.addCapability(resource("grid-data-store"), provider);
     }
 }
 

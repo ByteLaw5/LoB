@@ -23,10 +23,12 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
 import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState
+import net.minecraft.world.level.chunk.LevelChunk
 import net.minecraft.world.level.levelgen.*
 import net.minecraft.world.level.levelgen.blending.Blender
 import net.minecraft.world.level.levelgen.structure.BoundingBox
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager
+import net.minecraftforge.common.capabilities.Capability
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
@@ -123,6 +125,8 @@ class LobChunkGenerator(val biomeRegistry : HolderLookup.RegistryLookup<Biome>) 
         //super.createStructures(pRegistryAccess, pStructureState, pStructureManager, pChunk, pStructureTemplateManager)
 
 
+
+
         pStructureState.possibleStructureSets().forEach {
             val structure = it.get().structures[0].structure.get()
 
@@ -168,6 +172,7 @@ class LobChunkGenerator(val biomeRegistry : HolderLookup.RegistryLookup<Biome>) 
         val stone = Blocks.STONE.defaultBlockState()
 
         val pos = BlockPos.MutableBlockPos();
+
 
 
         for (x in 0 until 16){

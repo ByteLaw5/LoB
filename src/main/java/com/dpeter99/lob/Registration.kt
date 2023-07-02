@@ -3,7 +3,6 @@ package com.dpeter99.lob
 import com.dpeter99.lob.LobMod.ID
 import com.mojang.serialization.Codec
 import net.minecraft.core.registries.Registries
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.chunk.ChunkGenerator
@@ -12,7 +11,9 @@ import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureType
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager
+import net.minecraftforge.common.capabilities.CapabilityManager
+import net.minecraftforge.common.capabilities.CapabilityToken
+import net.minecraftforge.energy.IEnergyStorage
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.RegistryObject
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
@@ -48,6 +49,11 @@ object Registration {
     val GRID_STRUCTURE_PIECE: RegistryObject<StructurePieceType> = registerPieceType("grid_piece", ::GridStructurePiece);
 
     val GRID_PLACEMENT = STRUCTURE_PLACEMENT_TYPE.register("grid_placement") { GridPlacement.CODEC as StructurePlacementType<*> };
+
+
+    val GRID_GEN_DATA = CapabilityManager.get(object : CapabilityToken<IGridGenerationDataStore>() {})
+
+
 
     private fun <T : Structure> explicitStructureTypeTyping(structureCodec: Codec<T>): StructureType<T> {
         return StructureType { structureCodec }
