@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureType
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.common.capabilities.CapabilityToken
 import net.minecraftforge.energy.IEnergyStorage
@@ -48,10 +49,10 @@ object Registration {
 
     val GRID_STRUCTURE_PIECE: RegistryObject<StructurePieceType> = registerPieceType("grid_piece", ::GridStructurePiece);
 
-    val GRID_PLACEMENT = STRUCTURE_PLACEMENT_TYPE.register("grid_placement") { GridPlacement.CODEC as StructurePlacementType<*> };
+    val GRID_PLACEMENT: RegistryObject<StructurePlacementType<*>> = STRUCTURE_PLACEMENT_TYPE.register("grid_placement") { GridPlacement.CODEC as StructurePlacementType<*> };
 
 
-    val GRID_GEN_DATA = CapabilityManager.get(object : CapabilityToken<IGridGenerationDataStore>() {})
+    val GRID_GEN_DATA: Capability<IGridGenerationDataStore> = CapabilityManager.get(object : CapabilityToken<IGridGenerationDataStore>() {})
 
 
 

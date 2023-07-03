@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.CrashReport
 import net.minecraft.ReportedException
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.SectionPos
@@ -19,16 +20,21 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.biome.BiomeManager
 import net.minecraft.world.level.biome.FixedBiomeSource
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
 import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState
-import net.minecraft.world.level.chunk.LevelChunk
 import net.minecraft.world.level.levelgen.*
 import net.minecraft.world.level.levelgen.blending.Blender
 import net.minecraft.world.level.levelgen.structure.BoundingBox
+import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.levelgen.structure.Structure.GenerationStub
+import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.StructureStart
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager
-import net.minecraftforge.common.capabilities.Capability
+import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
@@ -52,10 +58,61 @@ class LobChunkGenerator(val biomeRegistry : HolderLookup.RegistryLookup<Biome>) 
     override fun applyBiomeDecoration(level: WorldGenLevel, chunk: ChunkAccess, structureManager: StructureManager) {
         //super.applyBiomeDecoration(level, chunk, structureManager);
 
-        default(chunk, level, structureManager)
+        //default(chunk, level, structureManager)
 
-        //structureManager.
+        val reg = level.registryAccess().registryOrThrow(Registries.STRUCTURE_SET);
+        val structureSet: StructureSet = reg.get(LobMod.resource("test_room"))!!
 
+
+        val chunkPos = chunk.pos;
+        val blockPos = BlockPos(chunkPos.minBlockX, 0, chunkPos.minBlockZ)
+
+        val context: Structure.GenerationContext = Structure.GenerationContext(
+            structureManager.registryAccess(),
+            this,
+            biomeSource,
+            randomState,
+            structureTemplateManager,
+            WorldgenRandom(level.random),
+            0,
+            chunkPos,
+            chunk.heightAccessorForGeneration,
+            Predicate { return@Predicate true; }
+        )
+
+        val stub = Optional.of(GenerationStub(blockPos){
+            val pos = BlockPos.MutableBlockPos(chunkPos.minBlockX, 0, chunkPos.minBlockZ)
+            generatePieces(it, context, pos)
+        });
+
+        if (stub.isPresent()) {
+            val structurepiecesbuilder: StructurePiecesBuilder = stub.get().getPiecesBuilder()
+            val structurestart = StructureStart(structureSet.structures[0].structure.get(), chunkPos, 0, structurepiecesbuilder.build())
+            if (structurestart.isValid) {
+                structurestart.placeInChunk(
+                    level,structureManager,this,level.random,getWritableArea(chunk), chunkPos
+                )
+            }
+        }
+
+
+    }
+
+    private fun generatePieces(pBuilder: StructurePiecesBuilder, pContext: Structure.GenerationContext, pos: BlockPos): GridStructurePiece {
+        val chunkpos = pContext.chunkPos()
+        val worldgenrandom = pContext.random()
+        //val blockpos = BlockPos(chunkpos.minBlockX, 0, chunkpos.minBlockZ)
+        val rotation = Rotation.NONE
+
+        val piece = GridStructurePiece(
+            pContext.structureTemplateManager,
+            LobMod.resource("test_struct"),
+            pos,
+            rotation,
+            0)
+        pBuilder.addPiece(piece)
+
+        return piece
     }
 
     private fun default(
@@ -114,6 +171,12 @@ class LobChunkGenerator(val biomeRegistry : HolderLookup.RegistryLookup<Biome>) 
         return BoundingBox(i, k, j, i + 15, l, j + 15)
     }
 
+    lateinit var registryAccess: RegistryAccess
+
+    lateinit var randomState: RandomState
+
+    lateinit var structureTemplateManager: StructureTemplateManager
+
     override fun createStructures(
         pRegistryAccess: RegistryAccess,
         pStructureState: ChunkGeneratorStructureState,
@@ -124,8 +187,9 @@ class LobChunkGenerator(val biomeRegistry : HolderLookup.RegistryLookup<Biome>) 
         //
         //super.createStructures(pRegistryAccess, pStructureState, pStructureManager, pChunk, pStructureTemplateManager)
 
-
-
+        registryAccess = pRegistryAccess;
+        randomState = pStructureState.randomState();
+        structureTemplateManager = pStructureTemplateManager;
 
         pStructureState.possibleStructureSets().forEach {
             val structure = it.get().structures[0].structure.get()

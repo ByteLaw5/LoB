@@ -13,7 +13,7 @@ class GridPlacement(val spacing: Int) :
     StructurePlacement(Vec3i.ZERO, FrequencyReductionMethod.DEFAULT, 1F, 0, Optional.empty()) {
 
     companion object{
-        val CODEC = RecordCodecBuilder.create {
+        val CODEC: com.mojang.serialization.Codec<GridPlacement> = RecordCodecBuilder.create {
             it.group(
                 com.mojang.serialization.Codec.INT.fieldOf("spacing").forGetter(GridPlacement::spacing.getter)
             ).apply(it, ::GridPlacement)

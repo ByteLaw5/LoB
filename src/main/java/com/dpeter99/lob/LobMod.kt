@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.joml.Vector2i
 
 
 /**
@@ -41,7 +42,7 @@ object LobMod {
     fun attachCapToChunk(event: AttachCapabilitiesEvent<LevelChunk>){
         LOGGER.error("asdasd");
 
-        val provider: ICapabilityProvider = GridGenerationDataStoreProvider()
+        val provider: ICapabilityProvider = GridGenerationDataStoreProvider(Vector2i(event.`object`.pos.x,event.`object`.pos.z))
 
         event.addCapability(resource("grid-data-store"), provider);
     }

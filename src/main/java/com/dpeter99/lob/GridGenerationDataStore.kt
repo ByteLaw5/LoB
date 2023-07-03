@@ -21,7 +21,7 @@ interface IGridGenerationDataStore {
 class GridCellData(var structureName: String) : INBTSerializable<CompoundTag>{
 
     companion object{
-        val CODEC = RecordCodecBuilder.create {
+        val CODEC: Codec<GridCellData> = RecordCodecBuilder.create {
             it.group(
                 Codec.STRING.fieldOf(GridCellData::structureName.name).forGetter(GridCellData::structureName.getter)
             ).apply(it, ::GridCellData)
